@@ -1,0 +1,30 @@
+
+a{
+    text-decoration: none;
+    color: black;
+}
+.page-heading{
+    text-align: center;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+.menu{
+    display: flex;
+    justify-content: space-around;
+}
+#container{
+    padding-top: 4em;
+}
+button{
+    border: none;
+    background-color: black;
+    outline: none;
+    color: white;
+    width: 9em;
+    height: 3em;
+}
+
+button:focus{
+    background-color: gainsboro;
+    color: black;
+}
