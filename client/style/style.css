@@ -27,4 +27,5 @@ button{
 button:focus{
     background-color: gainsboro;
     color: black;
+    border: 2px solid black;
 }
