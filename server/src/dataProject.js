@@ -1,80 +1,71 @@
-// matches.csv  and deliveries.csv  file
 let matches = require("../data/matches.json");
 let deliveries = require("../data/deliveries.json");
-let fs = require('fs');
 
-
-// 1. Luckiest team
-let luckyTeams = () => {
-
-    let lucky = {}
-    //to get the toss wins for each team
-    for (let key in matches) {
-        if (lucky.hasOwnProperty(matches[key]['toss_winner']))
-            lucky[matches[key]['toss_winner']] += 1;
-        else lucky[matches[key]['toss_winner']] = 1;
-    }
-    //  for (let key in matches) {
-    //      lucky[matches[key]['toss_winner']] = lucky[matches[key]['toss_winner']] || 0;
-    //      lucky[matches[key]['toss_winner']] += 1;
-    //  }
+// 1
+let luckyTeams = matches.reduce((lucky, match) => {
+    lucky[match['toss_winner']] = lucky[match['toss_winner']] || 0;
+    lucky[match['toss_winner']] += 1;
     return lucky;
-};
-// 2. Strike rate of batsman
-let strikeRate = () => {
+}, {})
+// 2
+let strikeRate = deliveries.reduce((strike, delivery) => {
 
-    let strike = {}
-    for (let key in deliveries) {
-        if (!strike.hasOwnProperty(deliveries[key]['batsman']))
-            strike[deliveries[key]['batsman']] = [parseInt(deliveries[key]['batsman_runs'], 10), 1];
-        else strike[deliveries[key]['batsman']] = [(strike[deliveries[key]['batsman']][0] + parseInt(deliveries[key]['batsman_runs'])), (strike[deliveries[key]['batsman']][1] + 1)];
+    strike[delivery['batsman']] = strike[delivery['batsman']] || [parseInt(delivery['batsman_runs'], 10), 0];
+    strike[delivery['batsman']] = [strike[delivery['batsman']][0] + parseInt(delivery['batsman_runs'], 10), strike[delivery['batsman']][1] + 1]
+    return strike;
+}, {})
+for (let key in strikeRate)
+    strikeRate[key] = Number(((strikeRate[key][0] / strikeRate[key][1]) * 100).toFixed(2));
+
+// 3
+let deathOverEcon = deliveries.filter((delivery) => Number(delivery['over']) > 16).reduce((ball, delivery) => {
+    ball[delivery['bowler']] = ball[delivery['bowler']] || [Number(delivery['total_runs']), 0];
+    ball[delivery['bowler']] = [ball[delivery['bowler']][0] + Number(delivery['total_runs']), ball[delivery['bowler']][1] + 1]
+    return ball
+}, {})
+
+for (let key in deathOverEcon) {
+    if (deathOverEcon[key][1] >= 36)
+        deathOverEcon[key] = Number((deathOverEcon[key][0] / (deathOverEcon[key][1] / 6)).toFixed(2));
+    else delete deathOverEcon[key];
+}
+// 4th
+
+let finalId = {};
+for (let key in matches)
+    finalId[matches[key]['season']] = matches[key]['id'];
+finalId = Object.values(finalId);
+
+let teams = {};
+
+for (let key in matches) {
+    if (finalId.includes(matches[key]['id'])) {
+        teams[matches[key]['team1']] = teams[matches[key]['team1']] || 0;
+        teams[matches[key]['team1']] += 1;
+        teams[matches[key]['team2']] = teams[matches[key]['team2']] || 0;
+        teams[matches[key]['team2']] += 1;
     }
-    let strikeRate = {};
-    for (let key in strike)
-        strikeRate[key] = ((strike[key][0] / strike[key][1]) * 100).toFixed(2);
+}
+let scoreinFinal = deliveries.filter((delivery) => (finalId.includes(Number(delivery['match_id'])) && Number(delivery['over']) <= 6))
+    .reduce((final, delivery) => {
+        final[delivery['batting_team']] = final[delivery['batting_team']] || Number(delivery['total_runs'])
+        final[delivery['batting_team']] += Number(delivery['total_runs'])
+        return final;
+    }, {})
 
-    return strikeRate;
-};
-// 3. performance of bowlers in the death overs(last 4 overs)
-let deathOverEcon = () => {
+//console.log(Object.entries(scoreinFinal))
 
-    let deathBowl = {};
-    for (let key in deliveries) {
-        if (Number(deliveries[key]['over']) >= 17) {
-            if (deathBowl.hasOwnProperty(deliveries[key]['bowler']))
-                deathBowl[deliveries[key]['bowler']] += Number(deliveries[key]['total_runs'])
-            else deathBowl[deliveries[key]['bowler']] = Number(deliveries[key]['total_runs'])
-        }
-    }
-    return deathBowl;
-};
-// 4. runs scored by teams in power play (first 6 overs) in final matches in all seasons
-let scoreInFinal = () => {
-    let finalId = {};
-
-    // gets match_ids of final matches -- the last matches in that season
-    for (let key in matches)
-        finalId[matches[key]['season']] = matches[key]['id'];
-    // since we need only ids reassign 'finalId' variable to an array that has only 
-    finalId = Object.values(finalId);
-
-    let mostRuns = {};
-    for (let key in deliveries) {
-        if (finalId.includes(Number(deliveries[key]['match_id']))) {
-            if (Number(deliveries[key]['over']) <= 6) {
-                if (mostRuns.hasOwnProperty(deliveries[key]['batting_team']))
-                    mostRuns[deliveries[key]['batting_team']] += Number(deliveries[key]['total_runs']);
-                else mostRuns[deliveries[key]['batting_team']] = Number(deliveries[key]['total_runs'])
-            }
-        }
-    }
-    return mostRuns;
-};
-
+ for (let key in scoreinFinal)
+     scoreinFinal[key] = Number((scoreinFinal[key] / teams[key]).toFixed(2))
 
 module.exports = {
-    luckyTeams : luckyTeams, 
-    strikeRate : strikeRate, 
-    deathOverEcon : deathOverEcon, 
-    scoreInFinal : scoreInFinal
+    luckyTeams: luckyTeams,
+    strikeRate: strikeRate,
+    deathOverEcon: deathOverEcon,
+    scoreinFinal: scoreinFinal
 };
+
+//console.log(luckyTeams)
+//console.log(strikeRate)
+//console.log(deathOverEcon)
+//console.log(scoreinFinal)

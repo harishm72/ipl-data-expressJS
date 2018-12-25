@@ -1,47 +1,9 @@
 
 window.onload = () => {
-    document.getElementById('lucky').addEventListener('click', () => {
-        fetch('http://localhost:3000/luckyTeams')
-            .then(res => res.json())
-            .then(data => {
-                let result = [];
-                for (let key in data)
-                    result.push([key, data[key]]);
 
-                var processed_json = new Array();
+    
 
-                for (let i = 0; i < result.length; i++)
-                    processed_json.push(result[i]);
-
-                new Highcharts.Chart({
-                    chart: {
-                        renderTo: 'container',
-                        type: 'bar'
-                    },
-                    title: {
-                        text: "Toss Wins of Each Team over all the seasons of Ipl"
-                    },
-                    xAxis: {
-                        type: 'category',
-                        allowDecimals: false,
-                        title: {
-                            text: "Teams"
-                        }
-                    },
-                    yAxis: {
-                        title: {
-                            text: "Toss Wins"
-                        }
-                    },
-                    series: [{
-                        name: 'Toss Wins',
-                        data: processed_json
-                    }]
-                });
-
-
-            })
-    })
+    document.getElementById('lucky').addEventListener('click', () => luckyTeams())
 
     document.getElementById('strikerate').addEventListener('click', () => {
         fetch('http://localhost:3000/strikeRate')
@@ -102,7 +64,7 @@ window.onload = () => {
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'column'
+                        type: 'bar'
                     },
                     title: {
                         text: "Economy of Bowlers in Death Overs"
@@ -144,7 +106,7 @@ window.onload = () => {
                     new Highcharts.Chart({
                         chart: {
                             renderTo: 'container',
-                            type: 'column'
+                            type: 'bar'
                         },
                         title: {
                             text: "Runs Scored in Final Matches"
@@ -169,4 +131,49 @@ window.onload = () => {
         
             })
     })
+
+    let luckyTeams = () =>{
+        fetch('/luckyTeams')
+            .then(res => res.json())
+            .then(data => {
+                let result = [];
+                for (let key in data)
+                    result.push([key, data[key]]);
+
+                var processed_json = new Array();
+
+                for (let i = 0; i < result.length; i++)
+                    processed_json.push(result[i]);
+
+                new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'container',
+                        type: 'bar'
+                    },
+                    title: {
+                        text: "Toss Wins of Each Team over all the seasons of Ipl"
+                    },
+                    xAxis: {
+                        type: 'category',
+                        allowDecimals: false,
+                        title: {
+                            text: "Teams"
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "Toss Wins"
+                        }
+                    },
+                    series: [{
+                        name: 'Toss Wins',
+                        data: processed_json
+                    }]
+                });
+
+
+            })
+    }
+
+    document.onload(luckyTeams())
 };
