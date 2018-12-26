@@ -55,8 +55,8 @@ window.onload = () => {
 
                 let result = [];
                 for (let key in data)
-                    result.push([key, parseInt(data[key], 10)]);
-                result = result.slice(0, 30);
+                    result.push([key,data[key], 10]);
+                //result = result.slice(0, 30);
                 let processed_json = new Array();
 
                 for (let i = 0; i < result.length; i++)
@@ -64,7 +64,7 @@ window.onload = () => {
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'bar'
+                        type: 'column'
                     },
                     title: {
                         text: "Economy of Bowlers in Death Overs"
@@ -94,7 +94,7 @@ window.onload = () => {
         fetch('http://localhost:3000/scoreInFinal')
             .then(res => res.json())
             .then(data => {
-
+                console.log(data)
                 let result = [];
                 for (let key in data)
                     result.push([key, parseInt(data[key], 10)])
@@ -136,6 +136,7 @@ window.onload = () => {
         fetch('/luckyTeams')
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 let result = [];
                 for (let key in data)
                     result.push([key, data[key]]);
@@ -175,5 +176,5 @@ window.onload = () => {
             })
     }
 
-    document.onload(luckyTeams())
+    //document.onload(luckyTeams())
 };
