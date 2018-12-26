@@ -53,7 +53,7 @@ let scoreinFinal = deliveries.filter((delivery) => (finalId.includes(Number(deli
         return final;
     }, {})
 
-//console.log(Object.entries(scoreinFinal))
+console.log(Object.entries(scoreinFinal))
 
  for (let key in scoreinFinal)
      scoreinFinal[key] = Number((scoreinFinal[key] / teams[key]).toFixed(2))

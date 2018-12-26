@@ -38,7 +38,9 @@ app.get('/deathOverEcon', (req, res) => {
     })
 });
 app.get('/scoreInFinal', (req, res) => {
-    db.query("", (err, results) =>{
+    db.query("select batting_team, sum(total_runs) as runs from deliveries where match_id in (select max(id) from matches group by season) and over < 7 group by batting_team ", (err, results) =>{
+        let out = {}
+        results.map((res) => {out[res['batting_team']] = res['runs']})
         res.send(out)
     })
 });
