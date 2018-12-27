@@ -46,17 +46,18 @@ for (let key in matches) {
         teams[matches[key]['team2']] += 1;
     }
 }
-let scoreinFinal = deliveries.filter((delivery) => (finalId.includes(Number(delivery['match_id'])) && Number(delivery['over']) <= 6))
+//console.log(teams)
+let scoreinFinal = deliveries.filter((delivery) => (finalId.includes(Number(delivery['match_id'])) && Number(delivery['over']) < 7))
     .reduce((final, delivery) => {
-        final[delivery['batting_team']] = final[delivery['batting_team']] || Number(delivery['total_runs'])
-        final[delivery['batting_team']] += Number(delivery['total_runs'])
+        final[delivery['batting_team']] = final[delivery['batting_team']] || 0 ;
+        final[delivery['batting_team']] += Number(delivery['total_runs']);
         return final;
     }, {})
 
-console.log(Object.entries(scoreinFinal))
+//console.log(Object.entries(scoreinFinal))
 
  for (let key in scoreinFinal)
-     scoreinFinal[key] = Number((scoreinFinal[key] / teams[key]).toFixed(2))
+     scoreinFinal[key] = Number((scoreinFinal[key] / teams[key]))//.toFixed(2))
 
 module.exports = {
     luckyTeams: luckyTeams,
@@ -66,6 +67,19 @@ module.exports = {
 };
 
 //console.log(luckyTeams)
-//console.log(strikeRate)
+strikeRate = Object.entries(strikeRate)
 //console.log(deathOverEcon)
 //console.log(scoreinFinal)
+
+//for(let key in strikeRate)
+  //  console.log(strikeRate[key][1])
+
+
+    function Comparator(a, b) {
+        if (a[1] > b[1]) return -1;
+        if (a[1] < b[1]) return 1;
+        return 0;
+      }
+     
+      strikeRate = strikeRate.sort(Comparator);
+      console.log(strikeRate);

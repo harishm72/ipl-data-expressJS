@@ -10,10 +10,18 @@ window.onload = () => {
             .then(res => res.json())
             .then(data => {
                 data = Object.entries(data);
+                function Comparator(a, b) {
+                    if (a[1] > b[1]) return -1;
+                    if (a[1] < b[1]) return 1;
+                    return 0;
+                  }
+                 
+                  data = data.sort(Comparator);
+                  data = data.splice(0,15);
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'column'
+                        type: 'bar'
                     },
                     title: {
                         text: "Strike Rate of Top 15 Batsmen"
@@ -45,10 +53,17 @@ window.onload = () => {
             .then(res => res.json())
             .then(data => {
                 data = Object.entries(data);
+                function Comparator(a, b) {
+                    if (a[1] < b[1]) return -1;
+                    if (a[1] > b[1]) return 1;
+                    return 0;
+                  }
+                  data = data.sort(Comparator);
+                  data = data.splice(0, 15);
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'column'
+                        type: 'bar'
                     },
                     title: {
                         text: "Economy of Bowlers in Death Overs"
@@ -83,7 +98,7 @@ window.onload = () => {
                     new Highcharts.Chart({
                         chart: {
                             renderTo: 'container',
-                            type: 'bar'
+                            type: 'pie'
                         },
                         title: {
                             text: "Runs Scored in Final Matches"
@@ -118,7 +133,7 @@ window.onload = () => {
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'bar'
+                        type: 'line'
                     },
                     title: {
                         text: "Toss Wins of Each Team over all the seasons of Ipl"
@@ -145,5 +160,5 @@ window.onload = () => {
             })
     }
 
-    //document.onload(luckyTeams())
+    document.onload(luckyTeams())
 };
