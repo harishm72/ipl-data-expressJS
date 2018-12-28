@@ -9,15 +9,7 @@ window.onload = () => {
         fetch('http://localhost:3000/strikeRate')
             .then(res => res.json())
             .then(data => {
-                let result = [];
-                for (let key in data)
-                    result.push([key, parseInt(data[key], 10)]);
-                result = result.slice(0, 15);
-
-                let processed_json = new Array();
-
-                for (let i = 0; i < result.length; i++)
-                    processed_json.push(result[i]);
+                data = Object.entries(data)
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
@@ -52,15 +44,7 @@ window.onload = () => {
         fetch('http://localhost:3000/deathOverEcon')
             .then(res => res.json())
             .then(data => {
-
-                let result = [];
-                for (let key in data)
-                    result.push([key, parseInt(data[key], 10)]);
-                result = result.slice(0, 30);
-                let processed_json = new Array();
-
-                for (let i = 0; i < result.length; i++)
-                    processed_json.push(result[i]);
+                data = Object.entries(data)
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
@@ -94,15 +78,7 @@ window.onload = () => {
         fetch('http://localhost:3000/scoreInFinal')
             .then(res => res.json())
             .then(data => {
-
-                let result = [];
-                for (let key in data)
-                    result.push([key, parseInt(data[key], 10)])
-                let processed_json = new Array();
-
-                for (let i = 0; i < result.length; i++)
-                    processed_json.push(result[i]);
-
+                data = Object.entries(data)
                     new Highcharts.Chart({
                         chart: {
                             renderTo: 'container',
@@ -136,14 +112,7 @@ window.onload = () => {
         fetch('/luckyTeams')
             .then(res => res.json())
             .then(data => {
-                let result = [];
-                for (let key in data)
-                    result.push([key, data[key]]);
-
-                var processed_json = new Array();
-
-                for (let i = 0; i < result.length; i++)
-                    processed_json.push(result[i]);
+                data = Object.entries(data)
 
                 new Highcharts.Chart({
                     chart: {
