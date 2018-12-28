@@ -63,7 +63,7 @@ window.onload = () => {
                 new Highcharts.Chart({
                     chart: {
                         renderTo: 'container',
-                        type: 'bar'
+                        type: 'column'
                     },
                     title: {
                         text: "Economy of Bowlers in Death Overs"
