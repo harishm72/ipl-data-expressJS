@@ -4,8 +4,8 @@ const path = require('path');
 const port = 3000;
 
 let iplData = require('./src/dataProject.js')
-let matches = require("../data/matches.json")
-let deliveries = require('../data/deliveries.json');
+let matches = require("./data/matches.json")
+let deliveries = require('./data/deliveries.json');
 
 
 app.use(express.static(path.join(__dirname, '../client')));
